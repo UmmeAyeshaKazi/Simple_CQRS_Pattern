@@ -1,5 +1,9 @@
 # MyDemoApp - CQRS Pattern Implementation
 
+[![Release with Semantic Versioning](https://github.com/UmmeAyeshaKazi/MyDemoApp/actions/workflows/release.yml/badge.svg)](https://github.com/YOUR_USERNAME/MyDemoApp/actions/workflows/release.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/YOUR_USERNAME/MyDemoApp)](https://github.com/YOUR_USERNAME/MyDemoApp/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A simple CQRS (Command Query Responsibility Segregation) application built with ASP.NET Core 10, Entity Framework Core, and SQLite without using MediatR library.
 
 ## Table of Contents
@@ -9,6 +13,8 @@ A simple CQRS (Command Query Responsibility Segregation) application built with 
 - [CQRS Flow](#cqrs-flow)
 - [Getting Started](#getting-started)
 - [Technology Stack](#technology-stack)
+- [Releases](#releases)
+- [Documentation](#documentation)
 
 ## Architecture Overview
 
@@ -395,6 +401,63 @@ dotnet ef database update
 dotnet ef migrations remove
 ```
 
+## Releases & Versioning
+
+This project uses **Semantic Versioning** with **Conventional Commits** and GitHub Actions for automated releases.
+
+### How Releases Work
+
+Releases are automatically created when code is pushed to the `main` branch using the following commit message format:
+
+#### Commit Message Format (Conventional Commits)
+
+**Patch Release** (v0.0.X → v0.0.X+1):
+```bash
+git commit -m "fix: correct validation logic"
+```
+
+**Minor Release** (v0.X.0 → v0.X+1.0):
+```bash
+git commit -m "feat: add search functionality"
+```
+
+**Major Release** (vX.0.0 → vX+1.0.0):
+```bash
+git commit -m "feat!: redesign API response format"
+# or
+git commit -m "refactor: restructure models
+
+BREAKING CHANGE: API response structure changed"
+```
+
+### Workflow
+
+1. Push code to `main` branch with conventional commit message
+2. GitHub Actions automatically runs
+3. Determines next semantic version
+4. Creates Git tag and GitHub Release
+5. Publishes application artifacts
+
+### View Releases
+
+- **GitHub Releases**: https://github.com/YOUR_USERNAME/MyDemoApp/releases
+- **GitHub Actions**: https://github.com/YOUR_USERNAME/MyDemoApp/actions
+- **Release Details**: Each release includes changelog, artifacts, and version info
+
+### For More Information
+
+See [Documentation/CICD_GITHUB_ACTIONS.md](./Documentation/CICD_GITHUB_ACTIONS.md) for detailed documentation on:
+- Version bumping rules
+- Commit message conventions
+- How to trigger different release types
+- Troubleshooting release workflows
+
+## Documentation
+
+All detailed documentation is located in the [Documentation/](./Documentation/) folder:
+
+- **[CICD_GITHUB_ACTIONS.md](./Documentation/CICD_GITHUB_ACTIONS.md)** - Complete guide for GitHub Actions, semantic versioning, and release workflow
+
 ## License
 
 This project is open source and available under the MIT License.
@@ -403,9 +466,11 @@ This project is open source and available under the MIT License.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+When contributing, please follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for commit messages to ensure proper semantic versioning.
+
 ---
 
 **Created**: April 16, 2026  
 **Framework**: ASP.NET Core 10  
-**Pattern**: CQRS without MediatR
-
+**Pattern**: CQRS without MediatR  
+**CI/CD**: GitHub Actions with Semantic Versioning

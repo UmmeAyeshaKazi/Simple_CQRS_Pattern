@@ -1,0 +1,181 @@
+name: Release with Semantic Versioning
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore MyDemoApp.WebAPI/
+
+      - name: Build
+        run: dotnet build MyDemoApp.WebAPI/ --configuration Release --no-restore
+
+      - name: Run tests (if any)
+        run: dotnet test MyDemoApp.WebAPI/ --configuration Release --no-build --verbosity normal || true
+
+      - name: Get previous version
+        id: previous_version
+        run: |
+          VERSION=$(git tag -l --sort=-version:refname | head -n 1)
+          if [ -z "$VERSION" ]; then
+            echo "version=v0.0.0" >> $GITHUB_OUTPUT
+          else
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine version bump
+        id: version_bump
+        run: |
+          PREVIOUS_VERSION="${{ steps.previous_version.outputs.version }}"
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          
+          # Extract major.minor.patch from version tag
+          VERSION_NUMBER=${PREVIOUS_VERSION#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_NUMBER"
+          
+          # Default values
+          MAJOR=${MAJOR:-0}
+          MINOR=${MINOR:-0}
+          PATCH=${PATCH:-0}
+          
+          # Determine version bump based on commit message
+          if echo "$COMMIT_MESSAGE" | grep -q "^feat!:"; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif echo "$COMMIT_MESSAGE" | grep -q "^feat:"; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          elif echo "$COMMIT_MESSAGE" | grep -q "^fix:"; then
+            PATCH=$((PATCH + 1))
+          elif echo "$COMMIT_MESSAGE" | grep -q "^BREAKING CHANGE"; then
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          else
+            # No conventional commit, just bump patch
+            PATCH=$((PATCH + 1))
+          fi
+          
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
+          echo "minor=$MINOR" >> $GITHUB_OUTPUT
+          echo "patch=$PATCH" >> $GITHUB_OUTPUT
+
+      - name: Check if version already exists
+        id: check_tag
+        run: |
+          if git rev-parse "${{ steps.version_bump.outputs.version }}" >/dev/null 2>&1; then
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Git tag
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a ${{ steps.version_bump.outputs.version }} -m "Release ${{ steps.version_bump.outputs.version }}"
+          git push origin ${{ steps.version_bump.outputs.version }}
+
+      - name: Generate release notes
+        id: release_notes
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          COMMIT_AUTHOR=$(git log -1 --pretty=%an)
+          COMMIT_EMAIL=$(git log -1 --pretty=%ae)
+          COMMIT_SHA=$(git log -1 --pretty=%h)
+          
+          RELEASE_NOTES="## Release ${{ steps.version_bump.outputs.version }}
+          
+          **Version:** ${{ steps.version_bump.outputs.major }}.${{ steps.version_bump.outputs.minor }}.${{ steps.version_bump.outputs.patch }}
+          
+          ### Changes
+          - $COMMIT_MESSAGE
+          
+          ### Commit Info
+          - Author: $COMMIT_AUTHOR ($COMMIT_EMAIL)
+          - Commit: $COMMIT_SHA
+          
+          ### Technology Stack
+          - ASP.NET Core 10
+          - Entity Framework Core 10
+          - SQLite
+          - CQRS Pattern
+          
+          ---
+          
+          **Release Date:** $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          
+          echo "release_notes<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version_bump.outputs.version }}
+          release_name: Release ${{ steps.version_bump.outputs.version }}
+          body: ${{ env.release_notes }}
+          draft: false
+          prerelease: false
+
+      - name: Build and Package
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: dotnet publish MyDemoApp.WebAPI/ -c Release -o ./publish
+
+      - name: Upload build artifacts
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mydemeoapp-${{ steps.version_bump.outputs.version }}
+          path: ./publish/
+
+      - name: Create Release Assets
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          cd ./publish
+          zip -r ../MyDemoApp-${{ steps.version_bump.outputs.version }}.zip .
+          cd ..
+
+      - name: Upload Release Assets
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version_bump.outputs.version }}
+          files: MyDemoApp-${{ steps.version_bump.outputs.version }}.zip
+          body: ${{ env.release_notes }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Skip release (version already exists)
+        if: steps.check_tag.outputs.tag_exists == 'true'
+        run: echo "Version tag already exists. Skipping release creation."
+
