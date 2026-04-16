@@ -228,40 +228,14 @@ graph TB
 graph TD
     Root["🏗️ MyDemoApp.WebAPI"]
     
-    Root --> Data["📁 Data/<br/>Database & Context"]
-    Data --> AppDbContext["📄 AppDbContext.cs<br/>EF Core DbContext"]
-    Data --> DB["🗄️ MyDemoApp.db<br/>SQLite Database"]
-    
-    Root --> Models["📁 Models/<br/>Domain Models"]
-    Models --> Student["👤 Student.cs<br/>Entity Class"]
-    
-    Root --> Commands["📁 Commands/<br/>Write Operations"]
-    Commands --> CreateCmd["✏️ CreateStudentCommand.cs"]
-    Commands --> UpdateCmd["✏️ UpdateStudentCommand.cs"]
-    Commands --> DeleteCmd["✏️ DeleteStudentCommand.cs"]
-    
-    Root --> Queries["📁 Queries/<br/>Read Operations"]
-    Queries --> GetAllQ["🔍 GetStudentsQuery.cs"]
-    Queries --> GetByIdQ["🔍 GetStudentByIdQuery.cs"]
-    
-    Root --> Handlers["📁 Handlers/<br/>Business Logic"]
-    Handlers --> IHandlers["📋 IHandlers.cs<br/>Interfaces"]
-    Handlers --> CreateHandler["⚙️ CreateStudentCommandHandler.cs"]
-    Handlers --> UpdateHandler["⚙️ UpdateStudentCommandHandler.cs"]
-    Handlers --> DeleteHandler["⚙️ DeleteStudentCommandHandler.cs"]
-    Handlers --> GetAllHandler["⚙️ GetStudentsQueryHandler.cs"]
-    Handlers --> GetByIdHandler["⚙️ GetStudentByIdQueryHandler.cs"]
-    
-    Root --> Controllers["📁 Controllers/<br/>API Endpoints"]
-    Controllers --> StudentsCtrl["🌐 StudentsController.cs<br/>CRUD Operations"]
-    
-    Root --> Migrations["📁 Migrations/<br/>Database Migrations"]
-    Migrations --> Migration1["📜 InitialCreate.cs"]
-    Migrations --> Migration2["📜 ModelSnapshot.cs"]
-    
-    Root --> Program["⚙️ Program.cs<br/>DI Configuration"]
-    Root --> AppSettings["⚙️ appsettings.json<br/>Configuration"]
-    Root --> ProjFile["📦 MyDemoApp.WebAPI.csproj<br/>Project File"]
+    Root --> Data["📁 Data<br/>AppDbContext.cs<br/>MyDemoApp.db"]
+    Root --> Models["📁 Models<br/>Student.cs"]
+    Root --> Commands["📁 Commands<br/>Create/Update/Delete"]
+    Root --> Queries["📁 Queries<br/>GetAll/GetById"]
+    Root --> Handlers["📁 Handlers<br/>5 Handler Classes"]
+    Root --> Controllers["📁 Controllers<br/>StudentsController.cs"]
+    Root --> Migrations["📁 Migrations<br/>InitialCreate"]
+    Root --> Config["📁 Configuration<br/>Program.cs<br/>appsettings.json"]
     
     style Root fill:#2196f3,stroke:#1565c0,stroke-width:3px,color:#fff
     style Data fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
@@ -271,9 +245,7 @@ graph TD
     style Handlers fill:#fff9c4,stroke:#f57f17,stroke-width:2px
     style Controllers fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
     style Migrations fill:#fce4ec,stroke:#c2185b,stroke-width:2px
-    style Program fill:#b2dfdb,stroke:#00695c,stroke-width:2px
-    style AppSettings fill:#b2dfdb,stroke:#00695c,stroke-width:2px
-    style ProjFile fill:#b2dfdb,stroke:#00695c,stroke-width:2px
+    style Config fill:#b2dfdb,stroke:#00695c,stroke-width:2px
 ```
 
 ## API Endpoints
