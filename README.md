@@ -1,7 +1,7 @@
 # MyDemoApp - CQRS Pattern Implementation
 
-[![Release with Semantic Versioning](https://github.com/UmmeAyeshaKazi/MyDemoApp/actions/workflows/release.yml/badge.svg)](https://github.com/UmmeAyeshaKazi/MyDemoApp/actions/workflows/release.yml)
-[![GitHub Release](https://img.shields.io/github/v/release/UmmeAyeshaKazi/MyDemoApp)](https://github.com/UmmeAyeshaKazi/MyDemoApp/releases)
+[![Release with Semantic Versioning](https://github.com/UmmeAyeshaKazi/Simple_CQRS_Pattern/actions/workflows/release.yml/badge.svg)](https://github.com/UmmeAyeshaKazi/Simple_CQRS_Pattern/actions/workflows/release.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/UmmeAyeshaKazi/Simple_CQRS_Pattern)](https://github.com/UmmeAyeshaKazi/Simple_CQRS_Pattern/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A simple CQRS (Command Query Responsibility Segregation) application built with ASP.NET Core 10, Entity Framework Core, and SQLite without using MediatR library.
