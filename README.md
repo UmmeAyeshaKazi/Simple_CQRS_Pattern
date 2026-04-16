@@ -24,10 +24,10 @@ graph TB
 
     subgraph "API Layer"
         GET["GET /api/students"]
-        GETID["GET /api/students/{id}"]
+        GETID["GET /api/students/:id"]
         POST["POST /api/students"]
-        PUT["PUT /api/students/{id}"]
-        DELETE["DELETE /api/students/{id}"]
+        PUT["PUT /api/students/:id"]
+        DELETE["DELETE /api/students/:id"]
     end
 
     subgraph "Controller"
@@ -179,11 +179,11 @@ graph LR
 graph TD
     API["📚 Student Management API<br/>Base URL: /api/students"]
     
-    API -->|GET /api/students| ReadAll["🔍 GetAll<br/>Query: GetStudentsQuery<br/>Handler: GetStudentsQueryHandler<br/>Response: 200 OK - List of Students"]
-    API -->|GET /api/students/{id}| ReadOne["🔍 GetById<br/>Query: GetStudentByIdQuery<br/>Handler: GetStudentByIdQueryHandler<br/>Response: 200 OK - Single Student or 404"]
+    API -->|GET /api/students| ReadAll["🔍 GetAll<br/>Query: GetStudentsQuery<br/>Handler: GetStudentsQueryHandler<br/>Response: 200 OK<br/>List of Students"]
+    API -->|GET /:id| ReadOne["🔍 GetById<br/>Query: GetStudentByIdQuery<br/>Handler: GetStudentByIdQueryHandler<br/>Response: 200 OK or 404"]
     API -->|POST /api/students| Create["✏️ Create<br/>Command: CreateStudentCommand<br/>Handler: CreateStudentCommandHandler<br/>Response: 201 Created"]
-    API -->|PUT /api/students/{id}| Update["✏️ Update<br/>Command: UpdateStudentCommand<br/>Handler: UpdateStudentCommandHandler<br/>Response: 204 No Content"]
-    API -->|DELETE /api/students/{id}| Delete["🗑️ Delete<br/>Command: DeleteStudentCommand<br/>Handler: DeleteStudentCommandHandler<br/>Response: 204 No Content"]
+    API -->|PUT /:id| Update["✏️ Update<br/>Command: UpdateStudentCommand<br/>Handler: UpdateStudentCommandHandler<br/>Response: 204 No Content"]
+    API -->|DELETE /:id| Delete["🗑️ Delete<br/>Command: DeleteStudentCommand<br/>Handler: DeleteStudentCommandHandler<br/>Response: 204 No Content"]
 
     style ReadAll fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
     style ReadOne fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
