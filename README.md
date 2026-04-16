@@ -224,35 +224,56 @@ graph TB
 
 ## Project Structure
 
-```
-MyDemoApp.WebAPI/
-├── Data/                          # Database context & configuration
-│   ├── AppDbContext.cs           # Entity Framework DbContext
-│   └── MyDemoApp.db              # SQLite database file
-├── Models/                        # Domain models
-│   └── Student.cs                # Student entity (Id, Name, Email, Age)
-├── Commands/                      # Write operations (CQRS)
-│   ├── CreateStudentCommand.cs   # Create new student
-│   ├── UpdateStudentCommand.cs   # Update existing student
-│   └── DeleteStudentCommand.cs   # Delete student
-├── Queries/                       # Read operations (CQRS)
-│   ├── GetStudentsQuery.cs       # Get all students
-│   └── GetStudentByIdQuery.cs    # Get single student
-├── Handlers/                      # Command & Query handlers
-│   ├── IHandlers.cs              # Handler interfaces
-│   ├── CreateStudentCommandHandler.cs
-│   ├── UpdateStudentCommandHandler.cs
-│   ├── DeleteStudentCommandHandler.cs
-│   ├── GetStudentsQueryHandler.cs
-│   └── GetStudentByIdQueryHandler.cs
-├── Controllers/                   # API endpoints
-│   └── StudentsController.cs     # CRUD operations
-├── Migrations/                    # EF Core migrations
-│   ├── 20260416104308_InitialCreate.cs
-│   └── AppDbContextModelSnapshot.cs
-├── Program.cs                     # DI configuration
-├── appsettings.json              # Configuration
-└── MyDemoApp.WebAPI.csproj       # Project file
+```mermaid
+graph TD
+    Root["🏗️ MyDemoApp.WebAPI"]
+    
+    Root --> Data["📁 Data/<br/>Database & Context"]
+    Data --> AppDbContext["📄 AppDbContext.cs<br/>EF Core DbContext"]
+    Data --> DB["🗄️ MyDemoApp.db<br/>SQLite Database"]
+    
+    Root --> Models["📁 Models/<br/>Domain Models"]
+    Models --> Student["👤 Student.cs<br/>Entity Class"]
+    
+    Root --> Commands["📁 Commands/<br/>Write Operations"]
+    Commands --> CreateCmd["✏️ CreateStudentCommand.cs"]
+    Commands --> UpdateCmd["✏️ UpdateStudentCommand.cs"]
+    Commands --> DeleteCmd["✏️ DeleteStudentCommand.cs"]
+    
+    Root --> Queries["📁 Queries/<br/>Read Operations"]
+    Queries --> GetAllQ["🔍 GetStudentsQuery.cs"]
+    Queries --> GetByIdQ["🔍 GetStudentByIdQuery.cs"]
+    
+    Root --> Handlers["📁 Handlers/<br/>Business Logic"]
+    Handlers --> IHandlers["📋 IHandlers.cs<br/>Interfaces"]
+    Handlers --> CreateHandler["⚙️ CreateStudentCommandHandler.cs"]
+    Handlers --> UpdateHandler["⚙️ UpdateStudentCommandHandler.cs"]
+    Handlers --> DeleteHandler["⚙️ DeleteStudentCommandHandler.cs"]
+    Handlers --> GetAllHandler["⚙️ GetStudentsQueryHandler.cs"]
+    Handlers --> GetByIdHandler["⚙️ GetStudentByIdQueryHandler.cs"]
+    
+    Root --> Controllers["📁 Controllers/<br/>API Endpoints"]
+    Controllers --> StudentsCtrl["🌐 StudentsController.cs<br/>CRUD Operations"]
+    
+    Root --> Migrations["📁 Migrations/<br/>Database Migrations"]
+    Migrations --> Migration1["📜 InitialCreate.cs"]
+    Migrations --> Migration2["📜 ModelSnapshot.cs"]
+    
+    Root --> Program["⚙️ Program.cs<br/>DI Configuration"]
+    Root --> AppSettings["⚙️ appsettings.json<br/>Configuration"]
+    Root --> ProjFile["📦 MyDemoApp.WebAPI.csproj<br/>Project File"]
+    
+    style Root fill:#2196f3,stroke:#1565c0,stroke-width:3px,color:#fff
+    style Data fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style Models fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    style Commands fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style Queries fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    style Handlers fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    style Controllers fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Migrations fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    style Program fill:#b2dfdb,stroke:#00695c,stroke-width:2px
+    style AppSettings fill:#b2dfdb,stroke:#00695c,stroke-width:2px
+    style ProjFile fill:#b2dfdb,stroke:#00695c,stroke-width:2px
 ```
 
 ## API Endpoints
