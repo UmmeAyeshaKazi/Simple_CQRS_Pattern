@@ -1,4 +1,4 @@
-# MyDemoApp - CQRS Pattern Implementation
+# Demo App - CQRS Pattern Implementation
 
 [![Release with Semantic Versioning](https://github.com/UmmeAyeshaKazi/Simple_CQRS_Pattern/actions/workflows/release.yml/badge.svg)](https://github.com/UmmeAyeshaKazi/Simple_CQRS_Pattern/actions/workflows/release.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/UmmeAyeshaKazi/Simple_CQRS_Pattern)](https://github.com/UmmeAyeshaKazi/Simple_CQRS_Pattern/releases)
